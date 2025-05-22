@@ -18,7 +18,16 @@ app.get('/deleteItem', (req, res) =>{
     const itemName = req.query.itemNameDelete;
     rpc.delete(itemName);
     res.send('Deletando item');
+});
+
+app.get('/updateItem', (req, res) =>{
+  const itemName = req.query.itemNameUpdate;
+  const itemQuantity = req.query.itemQuantity;
+  const itemPrice = req.query.itemPrice;
+  rpc.update(itemName, itemQuantity, itemPrice);
+  res.send('Alterando item');
 }
+
 )
 
 app.listen(PORT, '0.0.0.0', () => {
