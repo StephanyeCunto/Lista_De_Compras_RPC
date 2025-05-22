@@ -7,9 +7,18 @@
     </head>
 
     <form action="/addItem"  method="GET">
-        <input type="text" name="itemName">
+        <input type="text" name="itemNameAdd">
         <button  type="submit"> Adicionar Item </button>
     </form>
 
-    
+    <form action="/deleteItem" method="GET">
+        <input type="text" name="itemNameDelete">
+        <button type="submit"> Deletar Item </button>
+    </form>
+
+    <form action="/updateItem" method="GET">
+        <input type="text" name="itemUpdateDelete">
+        <input type="number" name="itemQuantity">
+        <input type="number" name="itemPrice">
+    </form>
 </html>
