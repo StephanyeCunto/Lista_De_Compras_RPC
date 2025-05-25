@@ -1,12 +1,15 @@
 import express from 'express';
 
-import { RpcClient } from '../services/RpcClient.js'
+import { RpcClient } from '../services/RpcClient.js';
+
+import cors from 'cors';
 
 const app = express();
 const PORT = 3000;
 const rpc = new RpcClient();
 
 app.use(express.static('../view'));
+app.use(cors());
 
 app.get('/addItem', (req, res) => {
   const itemName = req.query.itemNameAdd;
@@ -26,9 +29,11 @@ app.get('/updateItem', (req, res) =>{
   const itemPrice = req.query.itemPrice;
   rpc.update(itemName, itemQuantity, itemPrice);
   res.send('Alterando item');
-}
+});
 
-)
+app.get('/getItems', (req, res) => {
+    res.json(rpc.read());
+});
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor disponível na rede: http://172.25.0.19:${PORT}`);
