@@ -44,7 +44,6 @@ export class ItemController{
         return callback(null, `Item não encontrado na lista.`);
     }
 
-
     handleRead(err, params, callback){
         const items = this.itemDAO.getAll();
         callback(null,items);

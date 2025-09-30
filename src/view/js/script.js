@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://192.168.1.9:3000';
+const API_BASE_URL = 'http://192.168.1.5:3000';
 
 function loadItems() {
     const list = document.getElementById('itemList');

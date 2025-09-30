@@ -4,11 +4,17 @@ import { RpcClient } from '../services/RpcClient.js';
 
 import cors from 'cors';
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 const PORT = 3000;
 const rpc = new RpcClient();
 
-app.use(express.static('../view'));
+app.use(express.static(path.join(__dirname, '..', 'view')));
 app.use(cors());
 
 app.get('/addItem',async (req, res) => {
@@ -38,5 +44,5 @@ app.get('/getItems', async (req, res) => {
 
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor disponível na rede: http://172.25.0.19:${PORT}`);
+  console.log(`Servidor disponível na rede: http://192.168.1.5:${PORT}`);
 });

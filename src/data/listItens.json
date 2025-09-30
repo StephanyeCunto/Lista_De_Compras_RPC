@@ -6,12 +6,6 @@
     "isPurchased": false
   },
   {
-    "name": "Teste",
-    "quantity": 2,
-    "price": null,
-    "isPurchased": false
-  },
-  {
     "name": "Agua",
     "quantity": 5,
     "price": 4,
@@ -19,6 +13,30 @@
   },
   {
     "name": "Re",
+    "quantity": 1,
+    "price": null,
+    "isPurchased": false
+  },
+  {
+    "name": "Funcionaaa",
+    "quantity": 1,
+    "price": null,
+    "isPurchased": false
+  },
+  {
+    "name": "Agr tem que ir",
+    "quantity": 1,
+    "price": null,
+    "isPurchased": false
+  },
+  {
+    "name": "Teste",
+    "quantity": 3,
+    "price": null,
+    "isPurchased": false
+  },
+  {
+    "name": "Socorrooo",
     "quantity": 1,
     "price": null,
     "isPurchased": false

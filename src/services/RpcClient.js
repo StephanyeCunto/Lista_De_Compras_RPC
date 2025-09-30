@@ -6,7 +6,7 @@ const { createClient } = pkg;
 
 export class RpcClient{
   constructor(){
-    this.hostName = `192.168.1.9`; 
+    this.hostName = `192.168.1.5`; 
   }
   
   async create(itemName, quantity = null, price = null, isPurchased = null){
@@ -31,7 +31,6 @@ export class RpcClient{
       });
     });
   }
-
 
   async delete(itemName, quantity = null, price = null, isPurchased = null){
     const client = createClient({ host: this.hostName, port: 9090, path: '/' });
