@@ -2,7 +2,10 @@ import fs from 'fs';
 
 import { Item } from "../model/Item.js";
 
-const LOCAL_JSON_PATH = "../data/listItens.json";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const LOCAL_JSON_PATH = path.join(__dirname, "../data/listItens.json");
 
 export class ItemDAO{
     create(params){

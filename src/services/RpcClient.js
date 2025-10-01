@@ -15,9 +15,9 @@ export class RpcClient{
 
     return new Promise((resolve, reject) => {
       client.methodCall('create',item.getItem(), function (error, value) {
-      if (error) reject(error);
-      else resolve(value);
-    });
+        if (error) reject(error);
+        else resolve(value);
+      });
     });
   }
 
