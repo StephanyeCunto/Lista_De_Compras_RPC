@@ -1,5 +1,7 @@
 import fs from 'fs'; 
+import path from 'path';
 
+import { fileURLToPath } from 'url';
 import { Item } from "../model/Item.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -52,7 +54,6 @@ export class ItemDAO{
 
     deleteByName(itemName){
         itemName = this.toUpperFirstLowerRest(itemName);
-
         const originalItems= this.getAll();
         const items = originalItems.filter(item => item.name !== itemName);
         this.saveItems(items);

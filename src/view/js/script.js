@@ -1,113 +1,190 @@
-const API_BASE_URL = 'http://192.168.1.5:3000';
+      const API_BASE_URL = 'http://192.168.1.5:3000';
+        let itens = [];
+        let currentEditItem = null;
 
-function loadItems() {
-    const list = document.getElementById('itemList');
-    list.innerHTML = '<li class="loading">Carregando itens...</li>';
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2500);
+        }
 
-    fetch(`${API_BASE_URL}/getItems`).then(response => {
-        if (!response.ok) throw new Error('Servidor não encontrado');
-        return response.json();
-    }).then(data => {
-        if (data && data.length > 0) itens = data;
-        exibirItens();
-    }).catch(error => {
-        console.log('Usando dados locais:', error.message);
-        exibirItens();
-    });
-}
+        function loadItems() {
+            const list = document.getElementById('itemList');
+            list.innerHTML = '<li class="loading">Carregando...</li>';
 
-function exibirItens() {
-    const list = document.getElementById('itemList');
-    list.innerHTML = '';
-
-    if (itens.length === 0) {
-        list.innerHTML = '<li>Nenhum item na lista.</li>';
-        return;
-    }
-
-    itens.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = `${item.name || item.itemName} - Quantidade: ${item.quantity || 'N/A'}, Preço: R$${(item.price || 0).toFixed(2)}`;
-        list.appendChild(li);
-    });
-}
-
-function enviarDados(url, dados) {
-    return fetch(`${API_BASE_URL}${url}`, {
-        method: 'GET',
-    }).then(response => {
-        if (!response.ok) throw new Error('Servidor não disponível');
-        return response.text();
-    }).catch(error => {
-        console.log('Processando localmente:', error.message);
-        return 'Processado localmente';
-    });
-}
-
-document.getElementById('addForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const itemName = document.getElementById('itemNameAdd').value;
-
-    enviarDados(`/addItem?itemNameAdd=${encodeURIComponent(itemName)}`)
-        .then(response => {
-            console.log('Item adicionado:', response);
-
-            itens.push({
-                name: itemName,
-                quantity: 1,
-                price: 0.00
+            fetch(`${API_BASE_URL}/getItems`).then(response => {
+                if (!response.ok) throw new Error('Servidor não encontrado');
+                return response.json();
+            }).then(data => {
+                if (data && data.length > 0) itens = data;
+                exibirItens();
+            }).catch(error => {
+                console.log('Usando dados locais:', error.message);
+                exibirItens();
             });
+        }
 
-            exibirItens();
-            document.getElementById('itemNameAdd').value = '';
-        });
-});
+        function exibirItens() {
+            const list = document.getElementById('itemList');
+            list.innerHTML = '';
 
-document.getElementById('deleteForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const itemName = document.getElementById('itemNameDelete').value;
-
-    enviarDados(`/deleteItem?itemNameDelete=${encodeURIComponent(itemName)}`)
-        .then(response => {
-            console.log('Item deletado:', response);
-
-            itens = itens.filter(item =>
-                (item.name || item.itemName).toLowerCase() !== itemName.toLowerCase()
-            );
-
-            exibirItens();
-            document.getElementById('itemNameDelete').value = '';
-        });
-});
-
-document.getElementById('updateForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const itemName = document.getElementById('itemNameUpdate').value;
-    const quantity = document.getElementById('itemQuantity').value;
-    const price = document.getElementById('itemPrice').value;
-
-    enviarDados(`/updateItem?itemNameUpdate=${encodeURIComponent(itemName)}&itemQuantity=${quantity}&itemPrice=${price}`)
-        .then(response => {
-            console.log('Item alterado:', response);
-
-            const itemIndex = itens.findIndex(item =>
-                (item.name || item.itemName).toLowerCase() === itemName.toLowerCase()
-            );
-
-            if (itemIndex !== -1) {
-                itens[itemIndex].quantity = parseInt(quantity);
-                itens[itemIndex].price = parseFloat(price);
-            } else {
-                itens.push({
-                    name: itemName,
-                    quantity: parseInt(quantity),
-                    price: parseFloat(price)
-                });
+            if (itens.length === 0) {
+                list.innerHTML = `
+                    <li class="empty-state">
+                        <div class="empty-icon">🛒</div>
+                        <p>Nenhum item na lista</p>
+                    </li>
+                `;
+                return;
             }
 
-            exibirItens();
-            document.getElementById('updateForm').reset();
-        });
-});
+            itens.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.className = 'item';
+                const itemName = item.name || item.itemName;
+                const quantity = item.quantity || 1;
+                const price = item.price || 0;
+                const totalItemPrice = price * quantity;
 
-document.addEventListener('DOMContentLoaded', loadItems);
+                li.innerHTML = `
+                    <div class="item-info">
+                        <div class="item-name">${itemName}</div>
+                        <div class="item-details">${quantity} un. • R$ ${price.toFixed(2).replace('.', ',')}</div>
+                    </div>
+                    <div class="item-price">R$ ${totalItemPrice.toFixed(2).replace('.', ',')}</div>
+                `;
+
+                li.onclick = () => openEditModal(item);
+                list.appendChild(li);
+            });
+        }
+
+        function openEditModal(item) {
+            currentEditItem = item;
+            document.getElementById('editName').value = item.name || item.itemName;
+            document.getElementById('editQuantity').value = item.quantity || 1;
+            document.getElementById('editPrice').value = item.price || 0;
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('show');
+            currentEditItem = null;
+        }
+
+        function deleteItem() {
+            if (!currentEditItem) return;
+
+            const itemName = currentEditItem.name || currentEditItem.itemName;
+
+            fetch(`${API_BASE_URL}/deleteItem?itemNameDelete=${encodeURIComponent(itemName)}`, {
+                method: 'GET',
+            }).then(response => {
+                if (!response.ok) throw new Error('Servidor não disponível');
+                return response.text();
+            }).then(() => {
+                itens = itens.filter(item =>
+                    (item.name || item.itemName).toLowerCase() !== itemName.toLowerCase()
+                );
+                loadItems();
+                closeModal();
+                showNotification('Item removido');
+            }).catch(error => {
+                console.log('Processando localmente:', error.message);
+                itens = itens.filter(item =>
+                    (item.name || item.itemName).toLowerCase() !== itemName.toLowerCase()
+                );
+                loadItems();
+                closeModal();
+                showNotification('Item removido');
+            });
+        }
+
+        document.getElementById('addForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const itemName = document.getElementById('itemNameAdd').value.trim();
+
+            if (!itemName) return;
+
+            fetch(`${API_BASE_URL}/addItem?itemNameAdd=${encodeURIComponent(itemName)}`, {
+                method: 'GET',
+            }).then(response => {
+                if (!response.ok) throw new Error('Servidor não disponível');
+                return response.text();
+            }).then(() => {
+                itens.push({
+                    name: itemName,
+                    quantity: 1,
+                    price: 0.00
+                });
+                loadItems();
+                document.getElementById('itemNameAdd').value = '';
+                showNotification('Item adicionado');
+            }).catch(error => {
+                console.log('Processando localmente:', error.message);
+                itens.push({
+                    name: itemName,
+                    quantity: 1,
+                    price: 0.00
+                });
+                loadItems();
+                document.getElementById('itemNameAdd').value = '';
+                showNotification('Item adicionado');
+            });
+        });
+
+        document.getElementById('editForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            
+            const itemName = document.getElementById('editName').value.trim();
+            const quantity = document.getElementById('editQuantity').value;
+            const price = document.getElementById('editPrice').value;
+
+            fetch(`${API_BASE_URL}/updateItem?itemNameUpdate=${encodeURIComponent(itemName)}&itemQuantity=${quantity}&itemPrice=${price}`, {
+                method: 'GET',
+            }).then(response => {
+                if (!response.ok) throw new Error('Servidor não disponível');
+                return response.text();
+            }).then(() => {
+                const itemIndex = itens.findIndex(item =>
+                    (item.name || item.itemName).toLowerCase() === (currentEditItem.name || currentEditItem.itemName).toLowerCase()
+                );
+
+                if (itemIndex !== -1) {
+                    itens[itemIndex].name = itemName;
+                    itens[itemIndex].quantity = parseInt(quantity);
+                    itens[itemIndex].price = parseFloat(price);
+                }
+
+                loadItems();
+                closeModal();
+                showNotification('Item atualizado');
+            }).catch(error => {
+                console.log('Processando localmente:', error.message);
+                const itemIndex = itens.findIndex(item =>
+                    (item.name || item.itemName).toLowerCase() === (currentEditItem.name || currentEditItem.itemName).toLowerCase()
+                );
+
+                if (itemIndex !== -1) {
+                    itens[itemIndex].name = itemName;
+                    itens[itemIndex].quantity = parseInt(quantity);
+                    itens[itemIndex].price = parseFloat(price);
+                }
+
+                loadItems();
+                closeModal();
+                showNotification('Item atualizado');
+            });
+        });
+
+        // Fechar modal ao clicar fora
+        document.getElementById('editModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', loadItems);

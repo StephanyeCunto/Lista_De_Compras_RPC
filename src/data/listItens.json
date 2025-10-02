@@ -18,27 +18,45 @@
     "isPurchased": false
   },
   {
-    "name": "Funcionaaa",
+    "name": "Socorrooo",
     "quantity": 1,
     "price": null,
     "isPurchased": false
   },
   {
-    "name": "Agr tem que ir",
+    "name": "Nao",
+    "quantity": 1,
+    "price": null,
+    "isPurchased": false
+  },
+  {
+    "name": "Aaa",
     "quantity": 1,
     "price": null,
     "isPurchased": false
   },
   {
     "name": "Teste",
-    "quantity": 3,
+    "quantity": 9,
     "price": null,
     "isPurchased": false
   },
   {
-    "name": "Socorrooo",
+    "name": "Aaaa",
     "quantity": 1,
-    "price": null,
+    "price": 2,
+    "isPurchased": false
+  },
+  {
+    "name": "Agr tem que ir",
+    "quantity": 1,
+    "price": 3,
+    "isPurchased": false
+  },
+  {
+    "name": "Funcionaaa",
+    "quantity": 1,
+    "price": 3,
     "isPurchased": false
   }
 ]

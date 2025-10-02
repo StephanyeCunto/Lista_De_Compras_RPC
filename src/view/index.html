@@ -1,47 +1,61 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Compras</title>
     <link rel="stylesheet" href="css/style.css">
+    <script type="module" src="js/script.js"></script>
 </head>
-<body>
-    <h1>Lista de Compras</h1>
-    
-    <section>
-        <h2>Adicionar Item</h2>
-        <form id="addForm">
-            <input type="text" id="itemNameAdd" placeholder="Nome do item" required />
-            <button type="submit">Adicionar</button>
-        </form>
-    </section>
-    
-    <section>
-        <h2>Deletar Item</h2>
-        <form id="deleteForm">
-            <input type="text" id="itemNameDelete" placeholder="Nome do item" required />
-            <button type="submit">Deletar</button>
-        </form>
-    </section>
-    
-    <section>
-        <h2>Alterar Item</h2>
-        <form id="updateForm">
-            <input type="text" id="itemNameUpdate" placeholder="Nome do item" required />
-            <input type="number" id="itemQuantity" placeholder="Quantidade" min="1" required />
-            <input type="number" id="itemPrice" placeholder="Preço" step="0.01" min="0" required />
-            <button type="submit">Alterar</button>
-        </form>
-    </section>
-    
-    <section id="lista-itens">
-        <h2>Itens na Lista</h2>
-        <ul id="itemList">
-            <li class="loading">Carregando itens...</li>
-        </ul>
-    </section>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Lista de Compras</h1>
+                <p class="subtitle">Toque em um item para editar</p>
+            </header>
 
-    <script src="js/script.js"></script>
-</body>
+            <div class="add-section">
+                <form class="add-form" id="addForm">
+                    <input 
+                        type="text" 
+                        class="add-input" 
+                        id="itemNameAdd" 
+                        placeholder="Adicionar item..."
+                        required
+                    >
+                    <button type="submit" class="btn-add">Adicionar</button>
+                </form>
+            </div>
+
+            <ul class="items-list" id="itemList">
+                <li class="loading">Carregando...</li>
+            </ul>
+        </div>
+        <div class="modal" id="editModal">
+            <div class="modal-content">
+                <h2 class="modal-header">Editar Item</h2>
+                <form id="editForm">
+                    <div class="form-group">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-input" id="editName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Quantidade</label>
+                        <input type="number" class="form-input" id="editQuantity" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Preço (R$)</label>
+                        <input type="number" class="form-input" id="editPrice" step="0.01" min="0" required>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-cancel" onclick="closeModal()">Cancelar</button>
+                        <button type="button" class="btn btn-delete" onclick="deleteItem()">Excluir</button>
+                        <button type="submit" class="btn btn-save">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="notification" class="notification"></div>
+    </body>
 </html>
