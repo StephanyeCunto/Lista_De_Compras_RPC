@@ -8,54 +8,81 @@
     <script type="module" src="js/script.js"></script>
 </head>
     <body>
-        <div class="container">
-            <header>
-                <h1>Lista de Compras</h1>
-                <p class="subtitle">Toque em um item para editar</p>
-            </header>
+        <div class="app-container">
+            <div class="header">
+                <div class="header-content">
+                    <h1>
+                        <span>🛒</span>
+                        <span>Minhas Compras</span>
+                    </h1>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Total de Itens</div>
+                            <div class="stat-value" id="totalItems">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Valor Total</div>
+                            <div class="stat-value" id="totalValue">R$ 0,00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="add-section">
                 <form class="add-form" id="addForm">
-                    <input 
-                        type="text" 
-                        class="add-input" 
-                        id="itemNameAdd" 
-                        placeholder="Adicionar item..."
-                        required
-                    >
-                    <button type="submit" class="btn-add">Adicionar</button>
-                </form>
-            </div>
-
-            <ul class="items-list" id="itemList">
-                <li class="loading">Carregando...</li>
-            </ul>
-        </div>
-        <div class="modal" id="editModal">
-            <div class="modal-content">
-                <h2 class="modal-header">Editar Item</h2>
-                <form id="editForm">
                     <div class="form-group">
-                        <label class="form-label">Nome</label>
-                        <input type="text" class="form-input" id="editName" required>
+                        <label class="form-label">Produto</label>
+                        <input type="text" class="form-input" id="productName" placeholder="Ex: Arroz, Feijão..." required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Quantidade</label>
-                        <input type="number" class="form-input" id="editQuantity" min="1" required>
+                        <input type="number" class="form-input" id="productQuantity" placeholder="1" min="1" value="1" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Preço (R$)</label>
-                        <input type="number" class="form-input" id="editPrice" step="0.01" min="0" required>
+                        <input type="number" class="form-input" id="productPrice" placeholder="0,00" step="0.01" min="0" value="0" required>
+                    </div>
+                    <button type="submit" class="btn-add">
+                        <span>➕</span>
+                        <span>Adicionar</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="items-container" id="itemsContainer">
+                <div class="empty-state">
+                    <div class="empty-icon">🛍️</div>
+                    <p class="empty-text">Sua lista está vazia</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="editModal">
+            <div class="modal-content">
+                <h2 class="modal-header">✏️ Editar Item</h2>
+                <form id="editForm">
+                    <div class="modal-form-group">
+                        <label class="modal-label">Nome do Produto</label>
+                        <input type="text" class="modal-input" id="editName" required>
+                    </div>
+                    <div class="modal-form-group">
+                        <label class="modal-label">Quantidade</label>
+                        <input type="number" class="modal-input" id="editQuantity" min="1" required>
+                    </div>
+                    <div class="modal-form-group">
+                        <label class="modal-label">Preço (R$)</label>
+                        <input type="number" class="modal-input" id="editPrice" step="0.01" min="0" required>
                     </div>
                     <div class="modal-actions">
-                        <button type="button" class="btn btn-cancel" onclick="closeModal()">Cancelar</button>
-                        <button type="button" class="btn btn-delete" onclick="deleteItem()">Excluir</button>
-                        <button type="submit" class="btn btn-save">Salvar</button>
+                        <button type="button" class="btn btn-cancel" id="btnCancel">Cancelar</button>
+                        <button type="button" class="btn btn-delete" id="btnDelete">🗑️ Excluir</button>
+                        <button type="submit" class="btn btn-save">💾 Salvar</button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <div id="notification" class="notification"></div>
+        <div id="toast" class="toast"></div>
+
     </body>
 </html>

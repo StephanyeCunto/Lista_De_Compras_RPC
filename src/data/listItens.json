@@ -1,17 +1,5 @@
 [
   {
-    "name": "Coisa aleatoria",
-    "quantity": 9,
-    "price": 3,
-    "isPurchased": false
-  },
-  {
-    "name": "Agua",
-    "quantity": 5,
-    "price": 4,
-    "isPurchased": false
-  },
-  {
     "name": "Re",
     "quantity": 1,
     "price": null,
@@ -36,12 +24,6 @@
     "isPurchased": false
   },
   {
-    "name": "Teste",
-    "quantity": 9,
-    "price": null,
-    "isPurchased": false
-  },
-  {
     "name": "Aaaa",
     "quantity": 1,
     "price": 2,
@@ -57,6 +39,54 @@
     "name": "Funcionaaa",
     "quantity": 1,
     "price": 3,
+    "isPurchased": false
+  },
+  {
+    "name": "Agua",
+    "quantity": 5,
+    "price": 1,
+    "isPurchased": false
+  },
+  {
+    "name": "Coisa aleatoria",
+    "quantity": 9,
+    "price": 3,
+    "isPurchased": false
+  },
+  {
+    "name": "Teste",
+    "quantity": 10,
+    "price": null,
+    "isPurchased": false
+  },
+  {
+    "name": "Tes",
+    "quantity": 1,
+    "price": null,
+    "isPurchased": false
+  },
+  {
+    "name": "E",
+    "quantity": 1,
+    "price": null,
+    "isPurchased": false
+  },
+  {
+    "name": "Www",
+    "quantity": 1,
+    "price": null,
+    "isPurchased": false
+  },
+  {
+    "name": "Ss",
+    "quantity": 1,
+    "price": null,
+    "isPurchased": false
+  },
+  {
+    "name": "K",
+    "quantity": 1,
+    "price": null,
     "isPurchased": false
   }
 ]
