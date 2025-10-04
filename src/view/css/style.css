@@ -410,6 +410,11 @@ body {
     color: #212529;
 }
 
+#image-icon{
+    height: 1em; 
+    vertical-align: middle;
+}
+
 @keyframes slideInRight {
     from {
         transform: translateX(400px);
