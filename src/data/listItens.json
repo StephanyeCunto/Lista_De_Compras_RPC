@@ -1,11 +1,5 @@
 [
   {
-    "name": "Re",
-    "quantity": 1,
-    "price": null,
-    "isPurchased": false
-  },
-  {
     "name": "Socorrooo",
     "quantity": 1,
     "price": null,
@@ -87,6 +81,12 @@
     "name": "K",
     "quantity": 1,
     "price": null,
+    "isPurchased": false
+  },
+  {
+    "name": "Re",
+    "quantity": 1,
+    "price": 200,
     "isPurchased": false
   }
 ]

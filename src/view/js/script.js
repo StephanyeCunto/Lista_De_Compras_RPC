@@ -41,7 +41,7 @@ function exibirItens() {
 
     itens.forEach((item, index) => {
         const li = document.createElement('li');
-        li.className = 'item';
+        li.className = 'item-card';
         const itemName = item.name || item.itemName;
         const quantity = item.quantity || 1;
         const price = item.price || 0;

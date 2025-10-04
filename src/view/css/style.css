@@ -157,9 +157,6 @@ body {
 
 .items-container {
     padding: 24px 32px;
-    max-height: 500px;
-  /*  overflow-y: auto;*/
-    height: 100vh;  
     box-sizing: border-box; 
 }
 
