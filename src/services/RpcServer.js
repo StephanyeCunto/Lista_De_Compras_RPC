@@ -6,6 +6,7 @@ export class RpcServer{
     constructor(){
         try {
             this.server = createServer({ host: '0.0.0.0', port: 9090 });
+            console.log("Servidor rodando em 0.0.0.0:9090")
         } catch (err) {
             console.error("Erro ao iniciar o servidor RPC:", err);
         }

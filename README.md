@@ -2,24 +2,29 @@
 
 Este projeto implementa uma aplicação distribuída de lista de compras utilizando RPC (Remote Procedure Call) com XML-RPC. O sistema permite gerenciar itens de compras através de operações CRUD (Create, Read, Update, Delete) usando comunicação cliente-servidor.
 
+  <img src="img/ListaDeCompras.png" alt="Interface da Aplicação">
+
 ## 📋 Índice
 
 - [Características](#características)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Pré-requisitos](#pré-requisitos)
 - [Instalação](#instalação)
+- [Configuração de Rede](#configuração-de-rede)
 - [Como Executar](#como-executar)
 - [Arquitetura](#arquitetura)
 - [Diagrama de Classes](#diagrama-de-classes)
 - [Funcionalidades](#funcionalidades)
+- [Estrutura do Projeto](#estrutura-do-projeto)
 
 ## ✨ Características
 
-- Comunicação cliente-servidor via XML-RPC
-- Operações CRUD completas para gerenciamento de itens
-- Persistência de dados em arquivo JSON local
-- Interface web com Express.js
-- Arquitetura modular e escalável
+- 🌐 Comunicação cliente-servidor via XML-RPC
+- 📝 Operações CRUD completas para gerenciamento de itens
+- 💾 Persistência de dados em arquivo JSON local
+- 🖥️ Interface web responsiva com Express.js
+- 🔗 Acesso via rede local (LAN)
+- 🏗️ Arquitetura modular e escalável
 
 ## 🚀 Tecnologias Utilizadas
 
@@ -48,6 +53,110 @@ cd Lista_De_Compras_RPC
 npm install
 ```
 
+## 🌐 Configuração de Rede
+
+Para que a aplicação funcione corretamente em sua rede local, você precisa configurar o endereço IP da máquina que está executando o servidor.
+
+### 1️⃣ Descobrir o IP da sua máquina
+
+#### No Windows:
+```bash
+ipconfig
+```
+Procure por "IPv4 Address" na seção da sua conexão de rede ativa.
+
+#### No Linux/Mac:
+```bash
+ifconfig
+# ou
+ip addr show
+```
+Procure pelo endereço IP da interface ativa (geralmente `eth0` ou `wlan0`).
+
+**Exemplo de resultado:**
+```
+IPv4 Address: 192.168.1.5
+```
+
+### 2️⃣ Configurar o IP no Cliente RPC
+
+Abra o arquivo `src/services/RpcClient.js` e modifique o IP no construtor:
+
+```javascript
+export class RpcClient{
+  constructor(){
+    this.hostName = `192.168.1.5`; // ⬅️ ALTERE AQUI para o IP da sua máquina
+  }
+  // ... resto do código
+}
+```
+
+**📸 Exemplo visual:**
+
+```javascript
+// ❌ ANTES (com IP de exemplo)
+this.hostName = `192.168.1.5`;
+
+// ✅ DEPOIS (com SEU IP)
+this.hostName = `192.168.1.100`; // Use o IP que você descobriu
+```
+
+### 3️⃣ Configurar o IP na Interface Web
+
+Abra o arquivo `src/view/js/script.js` e modifique a constante `API_BASE_URL`:
+
+```javascript
+const API_BASE_URL = 'http://192.168.1.5:3000'; // ⬅️ ALTERE AQUI para o IP da sua máquina
+```
+
+**📸 Exemplo visual:**
+
+```javascript
+// ❌ ANTES (com IP de exemplo)
+const API_BASE_URL = 'http://192.168.1.5:3000';
+
+// ✅ DEPOIS (com SEU IP)
+const API_BASE_URL = 'http://192.168.1.100:3000'; // Use o IP que você descobriu
+```
+
+### 4️⃣ Configuração do Servidor RPC (já configurado)
+
+O servidor RPC já está configurado para aceitar conexões de qualquer dispositivo na rede local:
+
+```javascript
+export class RpcServer{
+    constructor(){
+        try {
+            // 0.0.0.0 permite conexões de qualquer IP na rede
+            this.server = createServer({ host: '0.0.0.0', port: 9090 });
+        } catch (err) {
+            console.error("Erro ao iniciar o servidor RPC:", err);
+        }
+    }
+}
+```
+
+> **💡 Nota:** O uso de `0.0.0.0` como host permite que o servidor aceite conexões de qualquer dispositivo na rede local. Não é necessário alterar esta configuração.
+
+### ⚠️ Importante
+
+- Os **três arquivos** devem usar o **mesmo endereço IP** da máquina que está executando o servidor
+- Certifique-se de que o firewall permite conexões nas portas **3000** (Express) e **9090** (RPC)
+- Todos os dispositivos devem estar na **mesma rede local**
+
+### 🔒 Configurando o Firewall
+
+#### Windows:
+1. Abra o "Firewall do Windows Defender"
+2. Clique em "Configurações Avançadas"
+3. Crie regras de entrada para as portas **3000** e **9090** (TCP)
+
+#### Linux (usando ufw):
+```bash
+sudo ufw allow 3000/tcp
+sudo ufw allow 9090/tcp
+```
+
 ## ▶️ Como Executar
 
 ### 1. Inicie o Servidor RPC
@@ -55,29 +164,79 @@ npm install
 Em um terminal, execute:
 
 ```bash
-node src/server/itemController.js
+node src/controller/ItemController.js
 ```
 
-O servidor RPC ficará aguardando conexões na porta configurada.
+**Saída esperada:**
+```
+Servidor RPC rodando em 0.0.0.0:9090
+```
+
+![Terminal Servidor RPC](https://via.placeholder.com/600x150/2ECC71/FFFFFF?text=Servidor+RPC+Iniciado)
 
 ### 2. Inicie a Aplicação Cliente (Express)
 
+Em **outro terminal**, execute:
+
 ```bash
-node src/client/expressApp.js
+node src/controller/ExpressApp.js
 ```
 
-A aplicação web estará disponível no IP da máquina na rede local, permitindo acesso de outros dispositivos conectados à mesma rede:  
+**Saída esperada:**
+```
+Servidor Express rodando
+```
+
+![Terminal Express](https://via.placeholder.com/600x150/3498DB/FFFFFF?text=Servidor+Express+Iniciado)
+
+### 3. Acesse a Aplicação
+
+Abra o navegador e acesse:
+
 `http://<IP_DA_MAQUINA>:PORTA`  
 
-> Exemplo: `http://192.168.1.5:3000`
+> **💡 Dica:** Outros dispositivos na mesma rede também podem acessar usando este endereço!
+
+![Interface Web](https://via.placeholder.com/800x500/E74C3C/FFFFFF?text=Aplicação+Rodando+no+Navegador)
 
 ## 🏗️ Arquitetura
 
-O sistema é composto por:
+O sistema é composto por três camadas principais:
 
-- **Servidor RPC**: Processa as requisições e gerencia a lógica de negócio
-- **Cliente Express**: Interface web que faz chamadas RPC ao servidor
-- **Camada de Dados**: Persistência em arquivo JSON local
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      CLIENTE (Navegador)                     │
+│                         Interface Web                         │
+│                     (HTML + CSS + JS)                        │
+└────────────────────────┬────────────────────────────────────┘
+                         │ HTTP (porta 3000)
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    SERVIDOR EXPRESS                          │
+│                    (ExpressApp.js)                           │
+│                   Serve Interface Web                        │
+└────────────────────────┬────────────────────────────────────┘
+                         │ XML-RPC
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    SERVIDOR RPC                              │
+│                  (ItemController.js)                         │
+│                   Lógica de Negócio                          │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    CAMADA DE DADOS                           │
+│                      (ItemDAO.js)                            │
+│                 Persistência em JSON                         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Componentes:
+
+- **Servidor RPC**: Processa as requisições e gerencia a lógica de negócio (porta 9090)
+- **Cliente Express**: Interface web que faz chamadas RPC ao servidor (porta 3000)
+- **Camada de Dados**: Persistência em arquivo JSON local (`listItens.json`)
 
 ## 📊 Diagrama de Classes
 
@@ -120,7 +279,8 @@ classDiagram
         +on(method, handler)
     }
     
-    class clientRPC {
+    class RpcClient {
+        -String hostName
         +addItem()
         +methodCall_read()
         +methodCall_update()
@@ -128,7 +288,7 @@ classDiagram
     }
     
     class ExpressApp {
-        -clientRPC rpc
+        -RpcClient rpc
         -Number PORT
         +configureRoutes()
         +startServer()
@@ -149,14 +309,14 @@ classDiagram
     ItemDAO --> Item : cria/manipula
     ItemDAO --> FileSystem : usa para persistência
     RpcServer --> XMLRPC : implementado com
-    clientRPC --> XMLRPC : implementado com
-    clientRPC ..> RpcServer : comunica via RPC
-    ExpressApp --> clientRPC : usa
+    RpcClient --> XMLRPC : implementado com
+    RpcClient ..> RpcServer : comunica via RPC
+    ExpressApp --> RpcClient : usa
 ```
 
 ### Descrição das Classes
 
-#### Item
+#### 📦 Item
 Classe modelo que representa um item da lista de compras.
 
 **Atributos:**
@@ -165,7 +325,7 @@ Classe modelo que representa um item da lista de compras.
 - `price`: Preço do item (pode ser nulo)
 - `isPurchased`: Indica se o item foi comprado
 
-#### ItemDAO
+#### 💾 ItemDAO
 Classe responsável pelo acesso e manipulação dos dados dos itens.
 
 **Métodos principais:**
@@ -175,20 +335,20 @@ Classe responsável pelo acesso e manipulação dos dados dos itens.
 - `findItemByName`: Busca um item pelo nome
 - `deleteByName`: Remove um item pelo nome
 
-#### ItemController
+#### 🎮 ItemController
 Controla a lógica de negócio e gerencia as requisições RPC.
 
 **Métodos principais:**
 - `registerHandlers`: Registra os handlers para as operações CRUD
 - `handleCreate/Read/Update/Delete`: Manipula as requisições RPC correspondentes
 
-#### RpcServer
+#### 🖥️ RpcServer
 Implementa o servidor RPC que recebe chamadas remotas.
 
 **Métodos:**
 - `on`: Registra um handler para um método RPC específico
 
-#### clientRPC
+#### 📡 RpcClient
 Cliente que faz chamadas ao servidor RPC.
 
 **Métodos:**
@@ -197,7 +357,7 @@ Cliente que faz chamadas ao servidor RPC.
 - `methodCall_update`: Atualiza um item
 - `methodCall_delete`: Remove um item
 
-#### ExpressApp
+#### 🌐 ExpressApp
 Aplicação web que fornece a interface para o usuário.
 
 **Métodos:**
@@ -209,48 +369,84 @@ Aplicação web que fornece a interface para o usuário.
 - O `ItemController` utiliza o `RpcServer` para receber chamadas remotas
 - O `ItemController` utiliza o `ItemDAO` para manipular os dados
 - O `ItemDAO` manipula objetos do tipo `Item`
-- O `clientRPC` se comunica com o `RpcServer` por meio de chamadas RPC
-- O `ExpressApp` utiliza o `clientRPC` para fazer requisições ao servidor
+- O `RpcClient` se comunica com o `RpcServer` por meio de chamadas RPC
+- O `ExpressApp` utiliza o `RpcClient` para fazer requisições ao servidor
 
-  
+## 📝 Estrutura de Dados
+
+Cada item possui a seguinte estrutura:
+
+```json
+{
+  "name": "Arroz",
+  "quantity": 2,
+  "price": 15.50,
+  "isPurchased": false
+}
+```
+
+**Exemplo de arquivo `listItens.json`:**
+```json
+[
+  {
+    "name": "Arroz",
+    "quantity": 2,
+    "price": 15.50,
+    "isPurchased": false
+  },
+  {
+    "name": "Feijão",
+    "quantity": 1,
+    "price": 8.90,
+    "isPurchased": true
+  },
+  {
+    "name": "Açúcar",
+    "quantity": 3,
+    "price": null,
+    "isPurchased": false
+  }
+]
+```
+
 ## 📁 Estrutura do Projeto
 
 ```
 Lista_De_Compras_RPC/
 │
-├── README.md                      # Documentação do projeto
+├── README.md                      # 📖 Documentação do projeto
 │
 └── src/
     ├── controller/
-    │   ├── ExpressApp.js          # Aplicação Express (servidor web)
-    │   └── ItemController.js      # Controlador de requisições RPC
+    │   ├── ExpressApp.js          # 🌐 Aplicação Express (servidor web)
+    │   └── ItemController.js      # 🎮 Controlador de requisições RPC
     │
     ├── dao/
-    │   └── ItemDAO.js             # Camada de acesso aos dados
+    │   └── ItemDAO.js             # 💾 Camada de acesso aos dados
     │
     ├── data/
-    │   └── listItens.json         # Arquivo JSON para persistência
+    │   └── listItens.json         # 📄 Arquivo JSON para persistência
     │
     ├── dto/
-    │   └── Item.js                # Data Transfer Object
+    │   └── Item.js                # 📦 Data Transfer Object
     │
     ├── model/
-    │   └── Item.js                # Modelo de dados do Item
+    │   └── Item.js                # 📋 Modelo de dados do Item
     │
     ├── services/
-    │   ├── RpcClient.js           # Cliente RPC
-    │   └── RpcServer.js           # Servidor RPC
+    │   ├── RpcClient.js           # 📡 Cliente RPC (CONFIGURAR IP AQUI)
+    │   └── RpcServer.js           # 🖥️ Servidor RPC
     │
     ├── view/
-    │   ├── index.html             # Interface web principal
+    │   ├── index.html             # 🎨 Interface web principal
     │   ├── css/
-    │   │   └── style.css          # Estilos da aplicação
+    │   │   └── style.css          # 💅 Estilos da aplicação
     │   └── js/
-    │       └── script.js          # Lógica do frontend
+    │       └── script.js          # ⚙️ Lógica do frontend (CONFIGURAR IP AQUI)
     │
-    ├── node_modules/              # Dependências do projeto
-    ├── package.json               # Configurações e dependências npm
-    └── package-lock.json          # Lock das versões das dependências
+    ├── node_modules/              # 📦 Dependências do projeto
+    ├── package.json               # ⚙️ Configurações e dependências npm
+    └── package-lock.json          # 🔒 Lock das versões das dependências
 ```
 
 ### Descrição dos Diretórios e Arquivos
@@ -284,7 +480,7 @@ Define os modelos de dados da aplicação.
 #### 📂 `src/services/`
 Serviços de comunicação RPC.
 
-- **`RpcClient.js`**: Cliente que realiza chamadas RPC ao servidor
+- **`RpcClient.js`**: Cliente que realiza chamadas RPC ao servidor ⚠️ **CONFIGURAR IP AQUI**
 - **`RpcServer.js`**: Servidor XML-RPC que recebe e processa chamadas remotas
 
 #### 📂 `src/view/`
@@ -292,34 +488,12 @@ Interface do usuário (frontend).
 
 - **`index.html`**: Página HTML principal da aplicação
 - **`css/style.css`**: Folha de estilos para a interface
-- **`js/script.js`**: Lógica JavaScript do frontend para interação com o usuário
+- **`js/script.js`**: Lógica JavaScript do frontend para interação com o usuário ⚠️ **CONFIGURAR IP AQUI**
 
 #### 📄 Arquivos de Configuração
 - **`package.json`**: Configurações do projeto, scripts e dependências npm
 - **`package-lock.json`**: Versões exatas das dependências instaladas
 - **`README.md`**: Documentação completa do projeto
-
-
-## 🎯 Funcionalidades
-
-- ✅ **Criar Item**: Adicionar novos itens à lista de compras
-- 📖 **Listar Itens**: Visualizar todos os itens cadastrados
-- ✏️ **Atualizar Item**: Modificar quantidade, preço e status de compra
-- 🗑️ **Deletar Item**: Remover itens da lista
-- 💾 **Persistência**: Dados salvos automaticamente em arquivo JSON
-
-## 📝 Estrutura de Dados
-
-Cada item possui a seguinte estrutura:
-
-```json
-{
-  "name": "Nome do Produto",
-  "quantity": 2,
-  "price": 15.50,
-  "isPurchased": false
-}
-```
 
 
 ## 📄 Licença
