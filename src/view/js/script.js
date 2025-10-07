@@ -20,10 +20,25 @@ function loadItems() {
         if (data && data.length > 0) itens = data;
         else if(data.length == 0) itens = [];
         exibirItens();
+        alterarHeader();
     }).catch(error => {
         console.log('Usando dados locais:', error.message);
         exibirItens();
     });
+}
+
+function alterarHeader(){
+    const totalItems = document.getElementById('totalItems');
+    totalItems.innerText = itens.length;
+
+    let totalvalueSum = 0;
+
+    itens.forEach((item, index) => {
+        const totalItemPrice = item.price * item.quantity;
+        totalvalueSum+= totalItemPrice;
+    })
+    const totalValue = document.getElementById('totalValue');
+    totalValue.innerText = `R$ `+totalvalueSum.toFixed(2).replace('.', ',');
 }
 
 function exibirItens() {

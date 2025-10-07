@@ -46,5 +46,5 @@ app.get('/getItems', async (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor disponível na rede: http://192.168.1.5:${PORT}`);
+  console.log(`Servidor disponível na rede`);
 });
