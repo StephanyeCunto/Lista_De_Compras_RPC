@@ -14,9 +14,10 @@ body {
 
 .app-container {
     width: 100%;
-    width: 100%;
+    min-height: 100vh;
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(10px);
+    flex-direction: column;
 }
 
 .header {
@@ -158,6 +159,7 @@ body {
 .items-container {
     padding: 24px 32px;
     box-sizing: border-box; 
+    flex: 1;
 }
 
 .items-container::-webkit-scrollbar {
@@ -247,6 +249,7 @@ body {
 }
 
 .empty-state {
+    list-style: none;
     text-align: center;
     padding: 80px 20px;
     color: #adb5bd;
