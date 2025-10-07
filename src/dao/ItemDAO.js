@@ -10,8 +10,8 @@ const __dirname = path.dirname(__filename);
 const LOCAL_JSON_PATH = path.join(__dirname, "../data/listItens.json");
 
 export class ItemDAO{
-    create(params){
-        const itemNew = new Item(this.toUpperFirstLowerRest(params));
+    create(params){       
+        const itemNew = new Item(this.toUpperFirstLowerRest(params[0]),params[1], params[2]);
         const itemInList = this.findItemByName(itemNew.name);
         if(itemInList) this.update(itemInList,itemInList.quantity+1);
         else this.addItem(itemNew);

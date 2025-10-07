@@ -19,7 +19,9 @@ app.use(cors());
 
 app.get('/addItem',async (req, res) => {
   const itemName = req.query.itemNameAdd;
-  const resAdd = await rpc.create(itemName);
+  const itemQuantity = req.query.itemQuantity;
+  const itemPrice = req.query.itemPrice;
+  const resAdd = await rpc.create(itemName, itemQuantity, itemPrice);
   res.send(resAdd);
 });
 

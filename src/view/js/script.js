@@ -44,7 +44,7 @@ function exibirItens() {
         li.className = 'item-card';
         const itemName = item.name || item.itemName;
         const quantity = item.quantity || 1;
-        const price = item.price || 0;
+        const price = parseFloat(item.price)|| 0;
         const totalItemPrice = price * quantity;
 
         li.innerHTML = `
@@ -75,6 +75,7 @@ function closeModal() {
 
 function deleteItem() {
     if (!currentEditItem) return;
+    console.log(currentEditItem);
 
     const itemName = currentEditItem.name || currentEditItem.itemName;
 
@@ -101,13 +102,21 @@ function deleteItem() {
     });
 }
 
+function clearFields(){
+    document.getElementById('productName').value = '';
+    document.getElementById('productQuantity').value = '1';
+    document.getElementById('productPrice').value = '0';
+}
+
 document.getElementById('addForm').addEventListener('submit', function (e) {
     e.preventDefault();
-    const itemName = document.getElementById('itemNameAdd').value.trim();
+    const itemName = document.getElementById('productName').value.trim();
+    const itemQuantity = Number(document.getElementById('productQuantity').value);
+    const itemPrice = document.getElementById('productPrice').value;
 
     if (!itemName) return;
 
-    fetch(`${API_BASE_URL}/addItem?itemNameAdd=${encodeURIComponent(itemName)}`, {
+    fetch(`${API_BASE_URL}/addItem?itemNameAdd=${encodeURIComponent(itemName)}&itemQuantity=${encodeURIComponent(itemQuantity)}&itemPrice=${encodeURIComponent(itemPrice)}`, {
         method: 'GET',
     }).then(response => {
         if (!response.ok) throw new Error('Servidor não disponível');
@@ -115,24 +124,25 @@ document.getElementById('addForm').addEventListener('submit', function (e) {
     }).then(() => {
         itens.push({
             name: itemName,
-            quantity: 1,
-            price: 0.00
+            quantity: itemQuantity,
+            price: itemPrice
         });
         loadItems();
-        document.getElementById('itemNameAdd').value = '';
+        clearFields();
         showNotification('Item adicionado');
     }).catch(error => {
         console.log('Processando localmente:', error.message);
         itens.push({
             name: itemName,
-            quantity: 1,
-            price: 0.00
+            quantity: itemQuantity,
+            price: itemPrice
         });
         loadItems();
-        document.getElementById('itemNameAdd').value = '';
+        clearFields();
         showNotification('Item adicionado');
     });
 });
+
 
 document.getElementById('editForm').addEventListener('submit', function (e) {
     e.preventDefault();

@@ -18,7 +18,7 @@ export class ItemController{
 
     handleCreate(err,params, callback){
         if(params[0].length != 0){
-            this.itemDAO.create(params[0]);
+            this.itemDAO.create(params);
             return callback(null, `Item adicionado com sucesso.`);
         }
         return callback(null, `Nenhum item foi adicionado. A lista de parâmetros está vazia.`);
