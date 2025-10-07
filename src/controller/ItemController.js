@@ -32,7 +32,6 @@ export class ItemController{
 
     handleUpdate(err, params, callback) {
         const item = this.itemDAO.findItemByName(params[0]);
-        console.log("Parametros :"+ params)
         if (item) {
             if (params[2] != null && params[2] <= 0) return callback(null, `Quantidade inválida.`);
             if (params[3] != null && params[3] <= 0) return callback(null, `Preço inválido.`);

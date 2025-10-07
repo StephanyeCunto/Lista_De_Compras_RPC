@@ -18,6 +18,7 @@ function loadItems() {
         return response.json();
     }).then(data => {
         if (data && data.length > 0) itens = data;
+        else if(data.length == 0) itens = [];
         exibirItens();
     }).catch(error => {
         console.log('Usando dados locais:', error.message);
@@ -171,24 +172,38 @@ document.getElementById('editForm').addEventListener('submit', function (e) {
         closeModal();
         showNotification('Item atualizado');
     }).catch(error => {
-        console.log('Processando localmente:', error.message);
-        const itemIndex = itens.findIndex(item =>
-            (item.name || item.itemName).toLowerCase() === itemName.toLowerCase()
-        );
-
-        if (itemIndex !== -1) {
-            itens[itemIndex].name = itemName;
-            itens[itemIndex].quantity = parseInt(quantity);
-            itens[itemIndex].price = parseFloat(price);
-        }
-
+        console.log('Erro:', error.message);
         loadItems();
         closeModal();
         showNotification('Item atualizado');
     });
 });
 
+document.getElementById("btnDelete").addEventListener('click', function(e){
+    const itemName = currentEditItem.name || currentEditItem.itemName;
+
+    fetch(`${API_BASE_URL}/deleteItem?itemNameDelete=${encodeURIComponent(itemName)}`,{
+        method: 'GET',
+    }).then(response => {
+        if (!response.ok) throw new Error('Servidor não disponível');
+        return response.text();
+    }).then(() => {
+        loadItems();
+        closeModal();
+        showNotification('Item deletado');
+    }).catch(error => {
+        console.log('Erro:', error.message);
+        loadItems();
+        closeModal();
+        showNotification('Item deletado');
+    })
+});
+
 document.getElementById('editModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+
+document.getElementById("btnCancel").addEventListener('click', function(e) {
     if (e.target === this) closeModal();
 });
 
