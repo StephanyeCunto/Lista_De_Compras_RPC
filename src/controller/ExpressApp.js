@@ -32,10 +32,11 @@ app.get('/deleteItem', async (req, res) =>{
 });
 
 app.get('/updateItem', async (req, res) =>{
+  const name = req.query.itemName;
   const itemName = req.query.itemNameUpdate;
   const itemQuantity = req.query.itemQuantity;
   const itemPrice = req.query.itemPrice;
-  const resUpdate = await rpc.update(itemName, itemQuantity, itemPrice);
+  const resUpdate = await rpc.update(name,itemName, itemQuantity, itemPrice);
   res.send(resUpdate);
 });
 

@@ -1,38 +1,32 @@
 [
   {
-    "name": "Nao",
-    "quantity": 1,
-    "price": null,
-    "isPurchased": false
-  },
-  {
-    "name": "Ssss",
-    "quantity": "12",
-    "price": null,
-    "isPurchased": false
-  },
-  {
-    "name": "Ssss",
-    "quantity": "12",
-    "price": "12",
-    "isPurchased": false
-  },
-  {
-    "name": "Asass",
-    "quantity": "12",
-    "price": "032",
-    "isPurchased": false
-  },
-  {
     "name": "Jjkk",
-    "quantity": "1",
-    "price": "0",
+    "quantity": 41,
+    "price": 3,
     "isPurchased": false
   },
   {
     "name": "Dff",
-    "quantity": "1",
-    "price": "0",
+    "quantity": 1,
+    "price": 2,
+    "isPurchased": false
+  },
+  {
+    "name": "Nao",
+    "quantity": 123,
+    "price": 30,
+    "isPurchased": false
+  },
+  {
+    "name": "Ss",
+    "quantity": 12,
+    "price": 34,
+    "isPurchased": false
+  },
+  {
+    "name": "Asass",
+    "quantity": 12,
+    "price": 3,
     "isPurchased": false
   }
 ]

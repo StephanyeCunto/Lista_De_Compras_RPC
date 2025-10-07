@@ -44,9 +44,9 @@ export class RpcClient{
     });
   }
 
-  async update(itemName, quantity = null, price = null, isPurchased = null){
+  async update(itemName,itemNameUpdate, quantity = null, price = null, isPurchased = null){
     const client = createClient({ host: this.hostName, port: 9090, path: '/' });
-    const item = new Item(itemName, quantity, price, isPurchased);
+    const item = new Item(itemName, itemNameUpdate, quantity, price, isPurchased);
 
     return new Promise((resolve, reject) => {
       client.methodCall('update',item.getItem(), function(error,value){

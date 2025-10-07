@@ -32,12 +32,13 @@ export class ItemController{
 
     handleUpdate(err, params, callback) {
         const item = this.itemDAO.findItemByName(params[0]);
+        console.log("Parametros :"+ params)
         if (item) {
-            if (params[1] != null && params[1] <= 0) return callback(null, `Quantidade inválida.`);
-            if (params[2] != null && params[2] <= 0) return callback(null, `Preço inválido.`);
-            if (params[3] != null && typeof params[3] !== "boolean") return callback(null, `Disponibilidade inválida (esperado true ou false).`);
+            if (params[2] != null && params[2] <= 0) return callback(null, `Quantidade inválida.`);
+            if (params[3] != null && params[3] <= 0) return callback(null, `Preço inválido.`);
+            if (params[4] != null && typeof params[4] !== "boolean") return callback(null, `Disponibilidade inválida (esperado true ou false).`);
 
-            this.itemDAO.update(item, parseInt(params[1]), parseFloat(params[2]), params[3]);
+            this.itemDAO.update(item, params[1], parseInt(params[2]), params[3], params[4]);
             return callback(null, `Item alterado com sucesso.`);
         }
 

@@ -143,22 +143,22 @@ document.getElementById('addForm').addEventListener('submit', function (e) {
     });
 });
 
-
 document.getElementById('editForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
-    const itemName = document.getElementById('editName').value.trim();
+    const itemName = currentEditItem.name || currentEditItem.itemName;
+    const itemNameUpdate = document.getElementById('editName').value.trim();
     const quantity = document.getElementById('editQuantity').value;
     const price = document.getElementById('editPrice').value;
 
-    fetch(`${API_BASE_URL}/updateItem?itemNameUpdate=${encodeURIComponent(itemName)}&itemQuantity=${quantity}&itemPrice=${price}`, {
+    fetch(`${API_BASE_URL}/updateItem?itemName=${encodeURIComponent(itemName)}&itemNameUpdate=${encodeURIComponent(itemNameUpdate)}&itemQuantity=${quantity}&itemPrice=${price}`, {
         method: 'GET',
     }).then(response => {
         if (!response.ok) throw new Error('Servidor não disponível');
         return response.text();
     }).then(() => {
         const itemIndex = itens.findIndex(item =>
-            (item.name || item.itemName).toLowerCase() === (currentEditItem.name || currentEditItem.itemName).toLowerCase()
+            (item.name || item.itemName).toLowerCase() === itemName.toLowerCase()
         );
 
         if (itemIndex !== -1) {
@@ -173,7 +173,7 @@ document.getElementById('editForm').addEventListener('submit', function (e) {
     }).catch(error => {
         console.log('Processando localmente:', error.message);
         const itemIndex = itens.findIndex(item =>
-            (item.name || item.itemName).toLowerCase() === (currentEditItem.name || currentEditItem.itemName).toLowerCase()
+            (item.name || item.itemName).toLowerCase() === itemName.toLowerCase()
         );
 
         if (itemIndex !== -1) {
