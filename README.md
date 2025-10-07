@@ -197,8 +197,6 @@ Abra o navegador e acesse:
 
 > **💡 Dica:** Outros dispositivos na mesma rede também podem acessar usando este endereço!
 
-![Interface Web](https://via.placeholder.com/800x500/E74C3C/FFFFFF?text=Aplicação+Rodando+no+Navegador)
-
 ## 🏗️ Arquitetura
 
 O sistema é composto por três camadas principais:
